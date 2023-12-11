@@ -21,6 +21,35 @@
     ></script>
     <title>Create Event | Eventify</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style></style>
+    <script>
+      function submitForm() {
+        var formData = $("#createEventForm").serialize();
+        $.ajax({
+          type: "POST",
+          url: "/create_event",
+          data: formData,
+          success: function (response) {
+            Swal.fire({
+              title: "Success",
+              text: response.message,
+              icon: "success",
+              confirmButtonText: "OK",
+            });
+
+            $("#createEventForm")[0].reset();
+          },
+          error: function (error) {
+            Swal.fire({
+              title: "Error",
+              text: "Terjadi kesalahan saat menambahkan event.",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+          },
+        });
+      }
+    </script>
   </head>
 
   <body class="bg-dark text-light">
@@ -30,11 +59,11 @@
     >
       <h1 class="text-center mt-3">Eventify</h1>
       <div
-        class="container-xxl p-5 mt-5 mb-5 bg-warning rounded-3 shadow-lg mx-auto"
+        class="container-sm p-5 mt-5 mb-5 bg-warning rounded-3 shadow-lg mx-auto"
       >
         <h2 class="mb-4">Create Event</h2>
 
-        <form class="">
+        <form id="createEventForm">
           <!-- event -->
           <div class="form-group">
             <label for="event">Event</label>
@@ -42,6 +71,7 @@
               type="text"
               class="form-control"
               id="event"
+              name="event"
               placeholder="Masukkan nama event"
               required
             />
@@ -50,10 +80,10 @@
           <!-- Kategori -->
           <div class="form-group mt-2">
             <label for="kategori">Kategori</label>
-            <select class="form-control" id="kategori" required>
+            <select class="form-control" id="kategori" name="kategori" required>
               <option value="">Pilih kategori</option>
-              <option value="musik">Lomba</option>
-              <option value="seni">Seminar</option>
+              <option value="lomba">Lomba</option>
+              <option value="seminar">Seminar</option>
             </select>
           </div>
 
@@ -112,7 +142,13 @@
 
           <!-- Button -->
           <div class="text-center">
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            <button
+              type="submit"
+              class="btn btn-primary mt-3"
+              onclick="submitForm()"
+            >
+              Add Event!
+            </button>
           </div>
         </form>
       </div>
