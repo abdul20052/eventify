@@ -40,6 +40,105 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      /*  */
+    }
+
+    .card-temp {
+      box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+      background-color: grey;
+    }
+
+    
+    .btn-category {
+      width: 100px;
+      height: 40px;
+      border-radius: 10%;
+      /* background-color: ; */
+    }
+    .btn-category:hover {
+      background-color: #217dbb;
+      transform: scale(1.05);
+    }
+
+    /* Search */
+    .custom-search-input {
+      border-radius: 10px;
+      padding: 10px;
+      border-color: #3498db;
+    }
+
+    .custom-search-btn {
+      border-radius: 10px;
+      margin-left: 5px;
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .custom-search-btn:hover {
+      background-color: #217dbb;
+      color: #fff;
+    }
+
+    /* Card */
+    .card-img-top {
+      border-radius: 20px;
+      padding: 20px;
+    }
+    .card-ev {
+      border-radius: 20px;
+      box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+        rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+    }
+    .card-body {
+      padding: 25px;
+      margin-top: -15px;
+    }
+    .btn-card {
+      border-radius: 10px;
+      width: 180px;
+      height: 50px;
+    }
+    .btn-card:hover {
+      background-color: black;
+      border: none;
+    }
+
+    .card-ev {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .card-ev:hover {
+      transform: scale(1.05);
+    }
+
+    .card-ev::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(
+        0,
+        0,
+        0,
+        0.5
+      ); 
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card-ev:hover::after {
+      opacity: 1;
+    }
+
+    .card-body,
+    .mb-5 {
+      position: relative;
+      z-index: 2;
     }
   </style>
 
@@ -54,33 +153,27 @@
       class="container d-flex flex-column py-5"
       style="min-height: calc(100vh - 88px)"
     >
-      <div class="card text-center">
-        <div class="card-header px-4 pt-3">
+      <div class="card text-center text-white card-temp">
+        <div class="card-header p-4 pt-3">
           <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="true" href="#">Lomba</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Seminar</a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link disabled"
-                href="#"
-                tabindex="-1"
-                aria-disabled="true"
-                >Disabled</a
-              >
-            </li>
+            <div class="category abc">
+              <button class="btn text-white btn-category p-2">Lomba</button>
+
+              <button class="btn text-white btn-category p-2">Seminar</button>
+            </div>
+
             <div class="search ms-auto">
               <form class="d-flex">
                 <input
-                  class="form-control me-2"
+                  class="form-control me-2 custom-search-input"
                   type="search"
                   placeholder="Cari..."
                   aria-label="Search"
                 />
-                <button class="btn btn-outline-primary" type="submit">
+                <button
+                  class="btn btn-outline-primary custom-search-btn"
+                  type="submit"
+                >
                   Search
                 </button>
               </form>
@@ -94,177 +187,132 @@
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem
             assumenda unde, Odio, accusantium ullam!
           </p>
-          <div class="container mt-4">
-            <div class="row justify-content-center">
-              <!-- Card 1 -->
-              <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                <div class="card">
-                  <img
-                    src="https://via.placeholder.com/150"
-                    class="card-img-top"
-                    alt="Card Image"
-                  />
 
-                  <div class="card-body">
-                    <h5 class="card-title">Card 1</h5>
-                    <p class="card-text text-start">
-                      Deskripsi Card 1 Lorem ipsum dolor sit amet consectetur
-                      adipisicing elit!
-                    </p>
-
-                    <p class="card-text text-end">
-                      <small class="text-muted">01/01/2023</small>
-                    </p>
-                    <a href="#" class="btn btn-primary w-50">Detail</a>
-                  </div>
+          <!-- Start -->
+          <div class="row row-cols-1 row-cols-md-3 g-4 py-5 justify-content-center">
+            <div class="col">
+              <div class="card card-ev bg-dark">
+                <img
+                  src="/static/assets/banner.jpg"
+                  class="card-img-top p-2"
+                  alt="..."
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Event1</h5>
+                  <p class="card-text">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Laboriosam dignissimos accusantium amet similique velit
+                    iste.
+                  </p>
                 </div>
-              </div>
-
-              <!-- Card 1 -->
-              <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                <div class="card">
-                  <img
-                    src="https://via.placeholder.com/150"
-                    class="card-img-top"
-                    alt="Card Image"
-                  />
-
-                  <div class="card-body">
-                    <h5 class="card-title">Card 1</h5>
-                    <p class="card-text text-start">
-                      Deskripsi Card 1 Lorem ipsum dolor sit amet consectetur
-                      adipisicing elit!
-                    </p>
-
-                    <p class="card-text text-end">
-                      <small class="text-muted">01/01/2023</small>
-                    </p>
-                    <a href="#" class="btn btn-primary w-50">Detail</a>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 1 -->
-              <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                <div class="card">
-                  <img
-                    src="https://via.placeholder.com/150"
-                    class="card-img-top"
-                    alt="Card Image"
-                  />
-
-                  <div class="card-body">
-                    <h5 class="card-title">Card 1</h5>
-                    <p class="card-text text-start">
-                      Deskripsi Card 1 Lorem ipsum dolor sit amet consectetur
-                      adipisicing elit!
-                    </p>
-
-                    <p class="card-text text-end">
-                      <small class="text-muted">01/01/2023</small>
-                    </p>
-                    <a href="#" class="btn btn-primary w-50">Detail</a>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 1 -->
-              <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                <div class="card">
-                  <img
-                    src="https://via.placeholder.com/150"
-                    class="card-img-top"
-                    alt="Card Image"
-                  />
-
-                  <div class="card-body">
-                    <h5 class="card-title">Card 1</h5>
-                    <p class="card-text text-start">
-                      Deskripsi Card 1 Lorem ipsum dolor sit amet consectetur
-                      adipisicing elit!
-                    </p>
-
-                    <p class="card-text text-end">
-                      <small class="text-muted">01/01/2023</small>
-                    </p>
-                    <a href="#" class="btn btn-primary w-50">Detail</a>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 1 -->
-              <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                <div class="card">
-                  <img
-                    src="https://via.placeholder.com/150"
-                    class="card-img-top"
-                    alt="Card Image"
-                  />
-
-                  <div class="card-body">
-                    <h5 class="card-title">Card 1</h5>
-                    <p class="card-text text-start">
-                      Deskripsi Card 1 Lorem ipsum dolor sit amet consectetur
-                      adipisicing elit!
-                    </p>
-
-                    <p class="card-text text-end">
-                      <small class="text-muted">01/01/2023</small>
-                    </p>
-                    <a href="#" class="btn btn-primary w-50">Detail</a>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 1 -->
-              <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                <div class="card">
-                  <img
-                    src="https://via.placeholder.com/150"
-                    class="card-img-top"
-                    alt="Card Image"
-                  />
-
-                  <div class="card-body">
-                    <h5 class="card-title">Card 1</h5>
-                    <p class="card-text text-start">
-                      Deskripsi Card 1 Lorem ipsum dolor sit amet consectetur
-                      adipisicing elit!
-                    </p>
-
-                    <p class="card-text text-end">
-                      <small class="text-muted">01/01/2023</small>
-                    </p>
-                    <a href="#" class="btn btn-primary w-50">Detail</a>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 1 -->
-              <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                <div class="card">
-                  <img
-                    src="https://via.placeholder.com/150"
-                    class="card-img-top"
-                    alt="Card Image"
-                  />
-
-                  <div class="card-body">
-                    <h5 class="card-title">Card 1</h5>
-                    <p class="card-text text-start">
-                      Deskripsi Card 1 Lorem ipsum dolor sit amet consectetur
-                      adipisicing elit!
-                    </p>
-
-                    <p class="card-text text-end">
-                      <small class="text-muted">01/01/2023</small>
-                    </p>
-                    <a href="#" class="btn btn-primary w-50">Detail</a>
-                  </div>
+                <p class="text-end px-3">01/12/2024</p>
+                <div class="mb-5 d-flex justify-content-around">
+                  <button class="btn btn-primary btn-card">
+                    More information!
+                  </button>
                 </div>
               </div>
             </div>
+
+            <div class="col">
+              <div class="card card-ev bg-dark">
+                <img
+                  src="/static/assets/banner.jpg"
+                  class="card-img-top p-2"
+                  alt="..."
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Event1</h5>
+                  <p class="card-text">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Laboriosam dignissimos accusantium amet similique velit
+                    iste.
+                  </p>
+                </div>
+                <p class="text-end px-3">01/12/2024</p>
+                <div class="mb-5 d-flex justify-content-around">
+                  <button class="btn btn-primary btn-card">
+                    More information!
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="card card-ev bg-dark">
+                <img
+                  src="/static/assets/banner.jpg"
+                  class="card-img-top p-2"
+                  alt="..."
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Event1</h5>
+                  <p class="card-text">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Laboriosam dignissimos accusantium amet similique velit
+                    iste.
+                  </p>
+                </div>
+                <p class="text-end px-3">01/12/2024</p>
+                <div class="mb-5 d-flex justify-content-around">
+                  <button class="btn btn-primary btn-card">
+                    More information!
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="card card-ev bg-dark">
+                <img
+                  src="/static/assets/banner.jpg"
+                  class="card-img-top p-2"
+                  alt="..."
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Event1</h5>
+                  <p class="card-text">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Laboriosam dignissimos accusantium amet similique velit
+                    iste.
+                  </p>
+                </div>
+                <p class="text-end px-3">01/12/2024</p>
+                <div class="mb-5 d-flex justify-content-around">
+                  <button class="btn btn-primary btn-card">
+                    More information!
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="card card-ev bg-dark">
+                <img
+                  src="/static/assets/banner.jpg"
+                  class="card-img-top p-2"
+                  alt="..."
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Event1</h5>
+                  <p class="card-text">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Laboriosam dignissimos accusantium amet similique velit
+                    iste.
+                  </p>
+                </div>
+                <p class="text-end px-3">01/12/2024</p>
+                <div class="mb-5 d-flex justify-content-around">
+                  <button class="btn btn-primary btn-card">
+                    More information!
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            
           </div>
+          <!-- End -->
         </div>
       </div>
     </div>
