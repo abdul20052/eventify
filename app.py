@@ -3,9 +3,9 @@ from flask import Flask, render_template, jsonify, request, session
 app = Flask(__name__)
 app.secret_key = 'EVENTIFY'
 
-# MONGODB_CONNECTION_STRING = "SECRET"
-# client = MongoClient(MONGODB_CONNECTION_STRING)
-# db = client.dblearningx
+MONGODB_CONNECTION_STRING = 'mongodb+srv://20051204052:l8YdBYlzNSheWHSf@unesa.sit4ohz.mongodb.net/?retryWrites=true&w=majority'
+client = MongoClient(MONGODB_CONNECTION_STRING)
+db = client.db_eventify
 
 @app.route('/')
 def home():
