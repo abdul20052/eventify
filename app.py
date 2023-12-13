@@ -26,7 +26,7 @@ def create_event():
     foto = request.files['foto']
 
     # Simpan data ke MongoDB
-    events_collection = mongo.db.events
+    events_collection = db.events
     data_event = {
         'event': event,
         'kategori': kategori,
