@@ -9,11 +9,9 @@ db = client.db_eventify
 
 @app.route('/')
 def home():
-    return render_template('index.html')
-
-@app.route('/beranda')
-def beranda():
-    return render_template('beranda.html')
+    events_collection = db.events
+    events = events_collection.find()
+    return render_template('index.html', events=events)
 
 @app.route('/create_event', methods=['POST'])
 def create_event():
