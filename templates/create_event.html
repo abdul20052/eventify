@@ -21,7 +21,7 @@
     }
   </style>
   <script>
-    function submitForm() {
+    async function submitForm() {
       let cek = validateForm();
       if (!cek) {
         return false;
@@ -35,7 +35,25 @@
         let deadline = $("#deadline").val();
         let hashtag1 = $("#hashtag1").val();
         let hashtag2 = $("#hashtag2").val();
-        let foto = $("#foto")[0].files[0];
+
+        let file = $("#foto").prop("files")[0];
+        let formDataFoto = new FormData();
+        formDataFoto.append("image", file);
+
+        const IMGBB_API_KEY = 'cc08f8c83f08731096cbb6abaaf4366f'
+        const IMGBB_URL = 'https://api.imgbb.com/1/upload'
+
+        // Upload image before sending it to the database
+        let response = await fetch(IMGBB_URL + '?key=' + IMGBB_API_KEY, {
+          method: 'POST',
+          body: formDataFoto
+        })
+
+        let json = await response.json()
+        let imageUrl = json.data.url
+
+        // Append image URL to FormData object
+        formData.append("foto", imageUrl);
 
         // Create FormData object to send files and other data
         let formData = new FormData();
@@ -146,16 +164,6 @@
             required>
         </div>
 
-        <!-- Hashtags -->
-        <div class="mb-4">
-          <label for="hashtags" class="block text-gray-400 font-semibold mb-2">Hashtags (optional)</label>
-          <div class="flex">
-            <input type="text" id="hashtag1" name="hashtags"
-              class="flex-1 w-full border rounded-md py-2 px-3 mr-2 bg-gray-200" required>
-            <input type="text" id="hashtag2" name="hashtags"
-              class="flex-1 w-full border rounded-md py-2 px-3 bg-gray-200">
-          </div>
-        </div>
 
         <!-- Photo Upload -->
         <div class="mb-4">

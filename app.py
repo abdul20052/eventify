@@ -34,8 +34,6 @@ def posting():
     deskripsi_receive = request.form.get('deskripsi_give')
     link_receive = request.form.get('link_give')
     deadline_receive = request.form.get('deadline_give')
-    hashtag1_receive = request.form.get('hashtag1_give')
-    hashtag2_receive = request.form.get('hashtag2_give')
 
     if "foto_give" in request.files:
             file = request.files['foto_give']
@@ -54,11 +52,9 @@ def posting():
         "deskripsi": deskripsi_receive,
         "link_pendaftaran": link_receive,
         "deadline": deadline_receive,
-        "hashtag1": hashtag1_receive,
-        "hashtag2": hashtag2_receive,
         "foto": file_path,
     }
-    db.event.insert_one(data_event)
+    db.events.insert_one(data_event)
     return jsonify({
         "result": "success", 
         "message": "Event berhasil ditambahkan!"
@@ -66,7 +62,7 @@ def posting():
 
 @app.route('/get_events', methods=['GET'])
 def get_events():
-    events = db.event.find()
+    events = db.events.find()
 
     events_list = []
     for event in events:
@@ -77,8 +73,6 @@ def get_events():
             'deskripsi': event['deskripsi'],
             'link_pendaftaran': event['link_pendaftaran'],
             'deadline': event['deadline'],
-            'hashtag1': event['hashtag1'],
-            'hashtag2': event['hashtag2'],
             'foto': event['foto'],
         })
 
@@ -86,7 +80,7 @@ def get_events():
 
 @app.route('/')
 def home():
-    events_collection = db.event
+    events_collection = db.events
     events = events_collection.find()
     return render_template('index.html', events=events)
 
@@ -102,7 +96,7 @@ def sign_in():
     username_receive = request.form["username_give"]
     password_receive = request.form["password_give"]
     pw_hash = hashlib.sha256(password_receive.encode("utf-8")).hexdigest()
-    result = db.event.find_one(
+    result = db.events.find_one(
         {
             "username": username_receive,
             "password": pw_hash,
@@ -143,7 +137,7 @@ def sign_up():
         "profile_pic_real": "profile_pics/profile_placeholder.png", 
         "profile_info": ""                                          
     }
-    db.event.insert_one(doc)
+    db.events.insert_one(doc)
     
     return jsonify({'result': 'success'})
 
@@ -152,7 +146,7 @@ def sign_up():
 def check_dup():
     # ID we should check whether or not the id is already taken
     username_receive = request.form.get('username_give')
-    exists = bool(db.event.find_one({'username': username_receive}))
+    exists = bool(db.events.find_one({'username': username_receive}))
     return jsonify({"result": "success", "exists": exists})
 
 

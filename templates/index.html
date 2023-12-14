@@ -20,6 +20,33 @@
     }
   </style>
   <script>
+    // Card Component
+    function createCard(event) {
+      return `<div class="rounded-xl overflow-hidden bg-gray-800 border-2 border-gray-900 mt-4 cursor-pointer">
+        <div class="overflow-hidden">
+            <img class="w-full h-80 object-cover transform transition-all hover:scale-125" src="${event.foto}" alt="">
+        </div>
+        <div class="px-4 pt-4">
+            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#${event.kategori}</span>
+        </div>
+        <div class="px-6 pt-2 flex justify-between">
+            <span class="text-gray-400">${new Date(event.deadline).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+            <div class="flex justify-center items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#9CA3AF" aria-hidden="true" width="16" height="16">
+                    <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path>
+                    <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clip-rule="evenodd"></path>
+                </svg>
+                <p class="text-gray-400 ml-1">10</p>
+            </div>
+        </div>
+        <div class="px-6 pt-2 pb-3">
+            <div class="font-bold text-xl -mb-1 text-white">${event.event}</div>
+            <p class="text-gray-400 text-base mb-3">${event.organizer}</p>
+        </div>
+    </div>`;
+    }
+  </script>
+  <script>
     $(document).ready(function () {
       function displayAllEvents() {
         // Remove the 'border-2' class from all buttons
@@ -38,41 +65,7 @@
             postBox.empty();
 
             events.forEach(function (event) {
-              const card = `<div class="rounded-xl overflow-hidden bg-gray-800 border-2 border-gray-900 mt-4">
-          <img class="w-full h-80 object-cover" src="/static/${event.foto}" alt="Sunset in the mountains">
-          <div class="px-4 pt-4">
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#${event.hashtag1}</span>
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#${event.hashtag2}</span>
-          </div>
-          <div class="px-6 pt-2 flex justify-between">
-            <span class="text-gray-400">${event.deadline}</span>
-            <div class="flex justify-center items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#9CA3AF" aria-hidden="true" width="16"
-                height="16">
-                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path>
-                <path fill-rule="evenodd"
-                  d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <p class="text-gray-400 ml-1">10</p>
-            </div>
-          </div>
-          <div class="px-6 pt-2 pb-3">
-            <div class="font-bold text-xl -mb-1 text-white">${event.event}</div>
-            <p class="text-gray-400 text-base mb-3">
-              ${event.kategori} | ${event.organizer}
-            </p>
-            <p class="text-gray-300 italic px-2">${event.deskripsi}</p>
-          </div>
-
-          <div class="flex justify-center items-center mb-4">
-            <a href="${event.link_pendaftaran}" class="w-48 h-10 bg-gray-300 rounded-md flex items-center justify-center">
-              <span class="font-bold text-gray-700 text-center">More Information!</span>
-            </a>
-          </div>
-        </div>`;
+              const card = createCard(event)
               postBox.append(card);
             });
           },
@@ -113,41 +106,7 @@
             });
 
             lombaEvents.forEach(function (event) {
-              const card = `<div class="rounded-xl overflow-hidden bg-gray-800 border-2 border-gray-900 mt-4">
-          <img class="w-full h-80 object-cover" src="/static/${event.foto}" alt="Sunset in the mountains">
-          <div class="px-4 pt-4">
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#${event.hashtag1}</span>
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#${event.hashtag2}</span>
-          </div>
-          <div class="px-6 pt-2 flex justify-between">
-            <span class="text-gray-400">${event.deadline}</span>
-            <div class="flex justify-center items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#9CA3AF" aria-hidden="true" width="16"
-                height="16">
-                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path>
-                <path fill-rule="evenodd"
-                  d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <p class="text-gray-400 ml-1">10</p>
-            </div>
-          </div>
-          <div class="px-6 pt-2 pb-3">
-            <div class="font-bold text-xl -mb-1 text-white">${event.event}</div>
-            <p class="text-gray-400 text-base mb-3">
-              ${event.kategori} | ${event.organizer}
-            </p>
-            <p class="text-gray-300 italic px-2">${event.deskripsi}</p>
-          </div>
-
-          <div class="flex justify-center items-center mb-4">
-            <a href="${event.link_pendaftaran}" class="w-48 h-10 bg-gray-300 rounded-md flex items-center justify-center">
-              <span class="font-bold text-gray-700 text-center">More Information!</span>
-            </a>
-          </div>
-        </div>`;
+              const card = createCard(event)
               postBox.append(card);
             });
           },
@@ -180,41 +139,7 @@
             });
 
             seminarEvents.forEach(function (event) {
-              const card = `<div class="rounded-xl overflow-hidden bg-gray-800 border-2 border-gray-900 mt-4">
-          <img class="w-full h-80 object-cover" src="/static/${event.foto}" alt="Sunset in the mountains">
-          <div class="px-4 pt-4">
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#${event.hashtag1}</span>
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#${event.hashtag2}</span>
-          </div>
-          <div class="px-6 pt-2 flex justify-between">
-            <span class="text-gray-400">${event.deadline}</span>
-            <div class="flex justify-center items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#9CA3AF" aria-hidden="true" width="16"
-                height="16">
-                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path>
-                <path fill-rule="evenodd"
-                  d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <p class="text-gray-400 ml-1">10</p>
-            </div>
-          </div>
-          <div class="px-6 pt-2 pb-3">
-            <div class="font-bold text-xl -mb-1 text-white">${event.event}</div>
-            <p class="text-gray-400 text-base mb-3">
-              ${event.kategori} | ${event.organizer}
-            </p>
-            <p class="text-gray-300 italic px-2">${event.deskripsi}</p>
-          </div>
-
-          <div class="flex justify-center items-center mb-4">
-            <a href="${event.link_pendaftaran}" class="w-48 h-10 bg-gray-300 rounded-md flex items-center justify-center">
-              <span class="font-bold text-gray-700 text-center">More Information!</span>
-            </a>
-          </div>
-        </div>`;
+              const card = createCard(event)
               postBox.append(card);
             });
           },
@@ -240,50 +165,28 @@
             const filteredEvents = events.filter(function (event) {
               return (
                 event.event.toLowerCase().indexOf(searchValue) !== -1 ||
-                event.deskripsi.toLowerCase().indexOf(searchValue) !== -1 ||
                 event.kategori.toLowerCase().indexOf(searchValue) !== -1
               );
             });
 
             filteredEvents.forEach(function (event) {
-              const card = `<div class="rounded-xl overflow-hidden bg-gray-800 border-2 border-gray-900 mt-4">
-          <img class="w-full h-80 object-cover" src="/static/${event.foto}" alt="Sunset in the mountains">
-          <div class="px-4 pt-4">
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#${event.hashtag1}</span>
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#${event.hashtag2}</span>
-          </div>
-          <div class="px-6 pt-2 flex justify-between">
-            <span class="text-gray-400">${event.deadline}</span>
-            <div class="flex justify-center items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#9CA3AF" aria-hidden="true" width="16"
-                height="16">
-                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path>
-                <path fill-rule="evenodd"
-                  d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <p class="text-gray-400 ml-1">10</p>
-            </div>
-          </div>
-          <div class="px-6 pt-2 pb-3">
-            <div class="font-bold text-xl -mb-1 text-white">${event.event}</div>
-            <p class="text-gray-400 text-base mb-3">
-              ${event.kategori} | ${event.organizer}
-            </p>
-            <p class="text-gray-300 italic px-2">${event.deskripsi}</p>
-          </div>
-
-          <div class="flex justify-center items-center mb-4">
-            <a href="${event.link_pendaftaran}" class="w-48 h-10 bg-gray-300 rounded-md flex items-center justify-center">
-              <span class="font-bold text-gray-700 text-center">More Information!</span>
-            </a>
-          </div>
-        </div>`;
+              const card = createCard(event)
 
               postBox.append(card);
             });
+            if (filteredEvents.length === 0) {
+              if ($("#no-events-message").length === 0) {
+                postBox.after(`
+            <div id="no-events-message" class="flex items-center justify-center w-full">
+                <div class="text-center text-white w-full">
+                    Event yang anda cari tidak ada.
+                </div>
+            </div>
+        `);
+              }
+            } else {
+              $("#no-events-message").remove();
+            }
           },
           error: function (error) {
             console.log("Error:", error);
@@ -321,8 +224,8 @@
     </div>
   </div>
 
-  <div class="px-10 py-10">
-    <div class="border-2 border-gray-900 rounded-md shadow-md shadow-gray-500">
+  <div class="px-8 py-4">
+    <div>
       <div class="card text-center text-white card-temp">
         <div class="card-header p-4 pt-3">
           <ul class="nav nav-tabs card-header-tabs flex items-center justify-center">
@@ -346,47 +249,6 @@
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 m-4 grid-cols-responsive" id="post-box">
-
-        <!-- {% for i in range(2) %}
-        <div class="rounded-xl overflow-hidden bg-gray-800 border-2 border-gray-900 mt-4">
-          <img class="w-full h-80 object-cover" src="https://via.placeholder.com/300" alt="Sunset in the mountains">
-          <div class="px-4 pt-4">
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#technology</span>
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#competition</span>
-          </div>
-          <div class="px-6 pt-2 flex justify-between">
-            <span class="text-gray-400">30 Desember 2023</span>
-            <div class="flex justify-center items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#9CA3AF" aria-hidden="true" width="16"
-                height="16">
-                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path>
-                <path fill-rule="evenodd"
-                  d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <p class="text-gray-400 ml-1">10</p>
-            </div>
-          </div>
-          <div class="px-6 pt-2 pb-3">
-            <div class="font-bold text-xl -mb-1 text-white">The Coldest Sunset</div>
-            <p class="text-gray-400 text-base mb-3">
-              Organizer | Lomba
-            </p>
-            <p class="text-gray-300 italic px-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut illo et
-              unde
-              voluptatibus non repellat, provident mollitia accusantium vitae quisquam amet, cupiditate iure. Doloribus
-              obcaecati aut ipsum numquam molestias optio!</p>
-          </div>
-
-          <div class="flex justify-center items-center mb-4">
-            <a href="" class="w-48 h-10 bg-gray-300 rounded-md flex items-center justify-center">
-              <span class="font-bold text-gray-700 text-center">More Information!</span>
-            </a>
-          </div>
-        </div>
-        {% endfor %} -->
       </div>
     </div>
   </div>
