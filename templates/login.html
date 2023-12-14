@@ -126,13 +126,13 @@
       console.log(username, password, password2);
       console.log($("#help-id").attr("class"));
 
-      if ($("#help-id").hasClass("is-danger")) {
-        alert("Please check your id");
-        return;
-      } else if (!$("#help-id").hasClass("is-success")) {
-        alert("Please double check your id");
-        return;
-      }
+      // if ($("#help-id").hasClass("is-danger")) {
+      //   alert("Please check your id");
+      //   return;
+      // } else if (!$("#help-id").hasClass("is-success")) {
+      //   alert("Please double check your id");
+      //   return;
+      // }
 
       if (password === "") {
         $("#help-password")
@@ -284,7 +284,6 @@
     border-color: #fff;
     color: black !important;
   }
-
 </style>
 
 <body>
@@ -307,13 +306,13 @@
                   <input id="input-username" class="input" type="text" placeholder="id" />
                   <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
                 </div>
-                <div id="btn-check-dup" class="control is-hidden">
+                <!-- <div id="btn-check-dup" class="control is-hidden">
                   <button class="button is-eventify" onclick="check_dup()">
                     Check your id
                   </button>
-                </div>
+                </div> -->
               </div>
-          
+
               <div class="field">
                 <div class="control has-icons-left">
                   <input id="input-password" class="input" type="password" placeholder="password" />
