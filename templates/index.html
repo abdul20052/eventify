@@ -48,17 +48,17 @@
   </div>
 
   <div class="grid grid-cols-3 gap-4 m-4">
-    {% for i in range(20) %}
+    {% for event in events %}
     <div class="rounded-xl overflow-hidden bg-gray-800 border-2 border-gray-900 mt-4" style="width: 400px;">
-      <img class="w-full h-80 object-cover" src="https://via.placeholder.com/300" alt="Sunset in the mountains">
+      <div class="overflow-hidden">
+        <img class="w-full h-80 object-cover transform transition-all hover:scale-125" src="{{ event.foto }}" alt="">
+      </div>
       <div class="px-4 pt-4">
-        <span
-          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#technology</span>
-        <span
-          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#competition</span>
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#{{
+          event.kategori }}</span>
       </div>
       <div class="px-6 pt-2 flex justify-between">
-        <span class="text-gray-400">30 Desember 2023</span>
+        <span class="text-gray-400">{{ event.deadline|formatdate }}</span>
         <div class="flex justify-center items-center">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#9CA3AF" aria-hidden="true" width="16"
             height="16">
@@ -71,9 +71,16 @@
         </div>
       </div>
       <div class="px-6 pt-2 pb-4">
-        <div class="font-bold text-xl mb-2 text-white">The Coldest Sunset</div>
-        <p class="text-gray-400 text-base">
-          Organizer
+        <div class="font-bold text-xl mb-2 text-white">{{ event.event }}</div>
+        <style>
+          .truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        </style>
+        <p class="text-gray-400 text-base truncate">
+          {{ event.deskripsi }}
         </p>
       </div>
 

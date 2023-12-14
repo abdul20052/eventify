@@ -1,9 +1,13 @@
 from pymongo import MongoClient
 from flask import Flask, render_template, jsonify, request, session
+import base64
+from datetime import datetime
+
 app = Flask(__name__)
 app.secret_key = 'EVENTIFY'
 
 MONGODB_CONNECTION_STRING = 'mongodb+srv://20051204052:l8YdBYlzNSheWHSf@unesa.sit4ohz.mongodb.net/?retryWrites=true&w=majority'
+
 client = MongoClient(MONGODB_CONNECTION_STRING)
 db = client.db_eventify
 
@@ -13,6 +17,14 @@ def home():
     events = events_collection.find()
     return render_template('index.html', events=events)
 
+@app.route('/create_event', methods=['GET'])
+def create_event_page():
+    return render_template('create_event.html')
+
+@app.template_filter('formatdate')
+def format_date(value, format='%d %B %Y'):
+    return datetime.strptime(value, '%Y-%m-%d').strftime(format)
+
 @app.route('/create_event', methods=['POST'])
 def create_event():
     event = request.form.get('event')
@@ -21,7 +33,7 @@ def create_event():
     link_pendaftaran = request.form.get('linkPendaftaran')
     contact_info = request.form.get('contactInfo')
     deadline = request.form.get('deadline')
-    foto = request.files['foto']
+    foto = request.form.get('foto')
 
     # Simpan data ke MongoDB
     events_collection = db.events
