@@ -34,16 +34,8 @@ def posting():
     deskripsi_receive = request.form.get('deskripsi_give')
     link_receive = request.form.get('link_give')
     deadline_receive = request.form.get('deadline_give')
+    foto_receive = request.form.get('foto_give')
 
-    if "foto_give" in request.files:
-            file = request.files['foto_give']
-            filename = secure_filename(file.filename)
-            extension = filename.split(".")[-1]
-            # Ganti spasi dengan underscore dalam nama file
-            filename= event_receive.replace(" ", "_")
-            file_path = f"event_pics/{filename}.{extension}"
-            file.save("./static/" + file_path)
-    
     # Simpan data ke MongoDB
     data_event = {
         "event": event_receive,
@@ -52,7 +44,7 @@ def posting():
         "deskripsi": deskripsi_receive,
         "link_pendaftaran": link_receive,
         "deadline": deadline_receive,
-        "foto": file_path,
+        "foto": foto_receive,
     }
     db.events.insert_one(data_event)
     return jsonify({
