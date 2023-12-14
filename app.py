@@ -8,39 +8,87 @@ import hashlib
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-
 app.secret_key = 'EVENTIFY'
 
 MONGODB_CONNECTION_STRING = 'mongodb+srv://20051204052:l8YdBYlzNSheWHSf@unesa.sit4ohz.mongodb.net/?retryWrites=true&w=majority'
-
 client = MongoClient(MONGODB_CONNECTION_STRING)
+
 db = client.db_eventify
 
 TOKEN_KEY ="mytoken"
 
-@app.route('/create_event', methods=['GET'])
-def create_event_page():
+@app.route('/create_event')
+def create_event():
     return render_template('create_event.html')
 
 @app.template_filter('formatdate')
 def format_date(value, format='%d %B %Y'):
     return datetime.strptime(value, '%Y-%m-%d').strftime(format)
 
-@app.route("/", methods=["GET"])
-def home():
-    events_collection = db.events
-    events = events_collection.find()
-    token_receive = request.cookies.get(TOKEN_KEY)
-    try:
-        payload = jwt.decode(token_receive, app.secret_key, algorithms=["HS256"])
 
-        user_info = db.events.find_one({"username": payload["id"]})
-        return render_template('index.html', user_info=user_info, events=events)
+@app.route("/posting", methods=["POST"])
+def posting():
+    event_receive = request.form.get('event_give')
+    organizer_receive = request.form.get('organizer_give')
+    kategori_receive = request.form.get('kategori_give')
+    deskripsi_receive = request.form.get('deskripsi_give')
+    link_receive = request.form.get('link_give')
+    deadline_receive = request.form.get('deadline_give')
+    hashtag1_receive = request.form.get('hashtag1_give')
+    hashtag2_receive = request.form.get('hashtag2_give')
+
+    if "foto_give" in request.files:
+            file = request.files['foto_give']
+            filename = secure_filename(file.filename)
+            extension = filename.split(".")[-1]
+            # Ganti spasi dengan underscore dalam nama file
+            filename= event_receive.replace(" ", "_")
+            file_path = f"event_pics/{filename}.{extension}"
+            file.save("./static/" + file_path)
     
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="Your token has expired"))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="There was problem logging you in"))
+    # Simpan data ke MongoDB
+    data_event = {
+        "event": event_receive,
+        "organizer": organizer_receive,
+        "kategori": kategori_receive,
+        "deskripsi": deskripsi_receive,
+        "link_pendaftaran": link_receive,
+        "deadline": deadline_receive,
+        "hashtag1": hashtag1_receive,
+        "hashtag2": hashtag2_receive,
+        "foto": file_path,
+    }
+    db.event.insert_one(data_event)
+    return jsonify({
+        "result": "success", 
+        "message": "Event berhasil ditambahkan!"
+    })
+
+@app.route('/get_events', methods=['GET'])
+def get_events():
+    events = db.event.find()
+
+    events_list = []
+    for event in events:
+        events_list.append({
+            'event': event['event'],
+            'organizer': event['organizer'],
+            'kategori': event['kategori'],
+            'deskripsi': event['deskripsi'],
+            'link_pendaftaran': event['link_pendaftaran'],
+            'deadline': event['deadline'],
+            'hashtag1': event['hashtag1'],
+            'hashtag2': event['hashtag2'],
+            'foto': event['foto'],
+        })
+
+    return jsonify({'events': events_list})
+
+@app.route('/')
+def home():
+    events_collection = db.event
+    events = events_collection.find()
+    return render_template('index.html', events=events)
 
 
 @app.route("/login", methods=["GET"])
@@ -54,7 +102,7 @@ def sign_in():
     username_receive = request.form["username_give"]
     password_receive = request.form["password_give"]
     pw_hash = hashlib.sha256(password_receive.encode("utf-8")).hexdigest()
-    result = db.events.find_one(
+    result = db.event.find_one(
         {
             "username": username_receive,
             "password": pw_hash,
@@ -95,7 +143,7 @@ def sign_up():
         "profile_pic_real": "profile_pics/profile_placeholder.png", 
         "profile_info": ""                                          
     }
-    db.events.insert_one(doc)
+    db.event.insert_one(doc)
     
     return jsonify({'result': 'success'})
 
@@ -104,33 +152,9 @@ def sign_up():
 def check_dup():
     # ID we should check whether or not the id is already taken
     username_receive = request.form.get('username_give')
-    exists = bool(db.events.find_one({'username': username_receive}))
+    exists = bool(db.event.find_one({'username': username_receive}))
     return jsonify({"result": "success", "exists": exists})
 
-@app.route('/create_event', methods=['POST'])
-def create_event():
-    event = request.form.get('event')
-    kategori = request.form.get('kategori')
-    deskripsi = request.form.get('deskripsi')
-    link_pendaftaran = request.form.get('linkPendaftaran')
-    contact_info = request.form.get('contactInfo')
-    deadline = request.form.get('deadline')
-    foto = request.form.get('foto')
-
-    # Simpan data ke MongoDB
-    events_collection = db.events
-    data_event = {
-        'event': event,
-        'kategori': kategori,
-        'deskripsi': deskripsi,
-        'link_pendaftaran': link_pendaftaran,
-        'contact_info': contact_info,
-        'deadline': deadline,
-        'foto': foto,
-    }
-    events_collection.insert_one(data_event)
-
-    return jsonify({'success': True, 'message': 'Event berhasil ditambahkan!'})
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=5000, debug=True)
