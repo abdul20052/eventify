@@ -8,7 +8,6 @@ app.secret_key = 'EVENTIFY'
 
 MONGODB_CONNECTION_STRING = 'mongodb+srv://20051204052:l8YdBYlzNSheWHSf@unesa.sit4ohz.mongodb.net/?retryWrites=true&w=majority'
 client = MongoClient(MONGODB_CONNECTION_STRING)
-
 db = client.db_eventify
 
 @app.route('/')

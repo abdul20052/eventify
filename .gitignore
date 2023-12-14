@@ -1,3 +1,5 @@
 .gitignore
 .env
 /venv
+/templates/register.html
+/templates/login.html
