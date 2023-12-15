@@ -68,6 +68,7 @@ def get_events():
             'link_pendaftaran': event['link_pendaftaran'],
             'deadline': event['deadline'],
             'foto': event['foto'],
+            'views': event.get('views', 0)
         })
 
     return jsonify({'events': events_list})
@@ -141,12 +142,15 @@ def sign_up():
     return jsonify({'result': 'success'})
 
 
-@app.route("/sign_up/check_dup", methods=["POST"])
-def check_dup():
-    # ID we should check whether or not the id is already taken
-    username_receive = request.form.get('username_give')
-    exists = bool(db.events.find_one({'username': username_receive}))
-    return jsonify({"result": "success", "exists": exists})
+@app.route('/event/<event_id>/views', methods=['POST'])
+def update_views(event_id):
+    event = db.events.find_one({'_id': ObjectId(event_id)})
+    if event.get('views'):
+        views = event['views'] + 1
+    else:
+        views = 1
+    db.events.update_one({'_id': ObjectId(event_id)}, {'$set': {'views': views}})
+    return jsonify({'msg': 'success'})
 
 
 if __name__ == "__main__":
