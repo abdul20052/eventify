@@ -6,6 +6,7 @@ import base64
 import jwt
 from datetime import datetime, timedelta
 import hashlib
+from functools import wraps
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -18,7 +19,17 @@ db = client.db_eventify
 
 TOKEN_KEY ="mytoken"
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in session:
+            return redirect(url_for('login', msg='You need to login first'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route('/create_event')
+@login_required
 def create_event():
     return render_template('create_event.html')
 
@@ -82,13 +93,21 @@ def detail_event(event_id):
 def home():
     events_collection = db.events
     events = events_collection.find()
-    return render_template('index.html', events=events)
+    return render_template('index.html', events=events, logged_in='username' in session)
 
-
-@app.route("/login", methods=["GET"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    msg = request.args.get("msg")
-    return render_template("login.html", msg=msg)
+    if request.method == 'POST':
+        username_receive = request.form["username_give"]
+        # Lakukan autentikasi dan set session jika berhasil
+        session['username'] = username_receive
+        return redirect(url_for('home'))
+    return render_template('login.html', msg=request.args.get("msg"))
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
 
 @app.route("/sign_in", methods=["POST"])
 def sign_in():
@@ -103,6 +122,7 @@ def sign_in():
         }
     )
     if result:
+        session['username'] = username_receive
         payload = {
             "id": username_receive,
             "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
@@ -117,11 +137,11 @@ def sign_in():
         )
     else:
         return jsonify(
-            {
-                "result": "fail",
-                "msg": "We could not find a user with that id/password combination",
-            }
-        )
+        {
+            "result": "fail",
+            "msg": "We could not find a user with that id/password combination",
+        }
+    )
 
 
 @app.route("/sign_up/save", methods=["POST"])
