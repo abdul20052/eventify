@@ -22,7 +22,7 @@
   <script>
     // Card Component
     function createCard(event) {
-      return `<div class="rounded-xl overflow-hidden bg-gray-800 border-2 border-gray-900 mt-4 cursor-pointer">
+      return `<div class="rounded-xl overflow-hidden bg-gray-800 border-2 border-gray-900 mt-4 cursor-pointer" onclick="window.location.href='/event/${event._id}'">
         <div class="overflow-hidden">
             <img class="w-full h-80 object-cover transform transition-all hover:scale-125" src="${event.foto}" alt="">
         </div>

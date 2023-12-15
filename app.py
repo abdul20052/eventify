@@ -1,6 +1,7 @@
 from flask import (
     Flask, render_template, jsonify, request, session, redirect, url_for)
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 import base64
 import jwt
 from datetime import datetime, timedelta
@@ -59,6 +60,7 @@ def get_events():
     events_list = []
     for event in events:
         events_list.append({
+            '_id': str(event['_id']),
             'event': event['event'],
             'organizer': event['organizer'],
             'kategori': event['kategori'],
@@ -69,6 +71,11 @@ def get_events():
         })
 
     return jsonify({'events': events_list})
+
+@app.route('/event/<event_id>')
+def detail_event(event_id):
+    event = db.events.find_one({'_id': ObjectId(event_id)})
+    return render_template('event_detail.html', event=event)
 
 @app.route('/')
 def home():

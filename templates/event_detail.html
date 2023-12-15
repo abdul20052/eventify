@@ -1,0 +1,94 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <title>Eventify</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="/static/assets/favicon.ico" />
+  <style>
+    .logo-gradient {
+      background: linear-gradient(90deg, #0070f3, #00b4f5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      /* set the text so that its not cropped */
+      height: 48px;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-800">
+  <!-- Navbar -->
+  <div class="bg-gray-900 py-2 px-4 md:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="flex items-center mb-4 md:mb-0">
+        <a href="/">
+          <h1 class="text-4xl font-bold logo-gradient">Eventify</h1>
+        </a>
+      </div>
+      <div class="flex items-center mb-4 md:mb-0">
+        <input type="text" placeholder="Cari Event"
+          class="bg-gray-800 text-white rounded-md px-4 py-2 mr-2 custom-search-input" />
+        <button class="bg-gray-800 text-white rounded-md px-4 py-2">
+          Search
+        </button>
+      </div>
+      <div class="flex items-center">
+        <button class="bg-gray-800 text-white rounded-md px-4 py-2 mr-2" onclick="window.location.href='/login'">
+          Masuk
+        </button>
+        <button class="bg-gray-800 text-white rounded-md px-4 py-2" onclick="window.location.href='/login'">
+          Daftar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="px-8 py-4">
+    <!-- a {{ event }} object that has event.event (the name) and then event.organizer, event.kategori, event.deskripsi, event.foto, event.link_pendaftaran, event.deadline -->
+    <!-- write a layout to show all of the object data, with image on the left and the whole thing on the right -->
+
+    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+      <div class="md:w-1/2">
+        <div class="w-full">
+          <img src="{{ event.foto }}" alt="" class="w-full" />
+        </div>
+      </div>
+      <style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          /* IE and Edge */
+          scrollbar-width: none;
+          /* Firefox */
+        }
+      </style>
+      <div class="md:w-1/2 space-y-2 overflow-y-auto h-auto scrollbar-hide" style="max-height: 96vh;">
+        <h1 class="text-white text-4xl font-bold">{{ event.event }}</h1>
+        <span
+          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{event.kategori}}</span>
+        <h2 class="text-gray-400 text-2xl">{{ event.organizer }}</h2>
+        <h4 class="text-gray-400 text-lg">{{ event.deadline|formatdate }}</h4>
+        <p class="text-gray-400 text-base leading-relaxed text-justify whitespace-pre-line">{{ event.deskripsi }}</p>
+        <div class="pt-5">
+          <a target="_blank" rel="noopener noreferrer" href="{{ event.link_pendaftaran }}"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5">
+            Daftar Sekarang
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</body>
+
+</html>
