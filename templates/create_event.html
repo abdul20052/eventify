@@ -98,6 +98,10 @@
           onclick="submitForm()">
           Create Event
         </button>
+        <button class="bg-red-500 text-white w-48 font-bold rounded-md py-2 px-4 ml-2 hover:bg-red-600"
+          onclick="logout()">
+          Logout
+        </button>
       </div>
     </div>
   </div>
@@ -199,6 +203,25 @@
       return false;
     }
     return true;
+  }
+
+  function logout() {
+    $.ajax({
+      method: "GET",
+      url: "/logout",
+      success: function (response) {
+        // Setelah berhasil logout, arahkan pengguna ke halaman login
+        window.location.href = "/login";
+      },
+      error: function (error) {
+        Swal.fire({
+          title: "Error",
+          text: "Terjadi kesalahan saat logout.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      },
+    });
   }
 </script>
 

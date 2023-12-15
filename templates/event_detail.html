@@ -37,13 +37,11 @@
         </button>
       </div>
       <div class="flex items-center">
-        <button class="bg-gray-800 text-white rounded-md px-4 py-2 mr-2" onclick="window.location.href='/login'">
-          Masuk
-        </button>
-        <button class="bg-gray-800 text-white rounded-md px-4 py-2" onclick="window.location.href='/login'">
-          Daftar
+        <button class="bg-gray-800 text-white rounded-md px-4 py-2 mr-2" onclick="window.location.href='/logout'">
+          Logout
         </button>
       </div>
+
     </div>
   </div>
 
@@ -113,6 +111,25 @@
       }
     });
   });
+
+  function logout() {
+    $.ajax({
+      method: "GET",
+      url: "/logout",
+      success: function (response) {
+        // Setelah berhasil logout, arahkan pengguna ke halaman login
+        window.location.href = "/login";
+      },
+      error: function (error) {
+        Swal.fire({
+          title: "Error",
+          text: "Terjadi kesalahan saat logout.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      },
+    });
+  }
 </script>
 
 </html>
