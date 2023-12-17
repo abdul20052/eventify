@@ -29,23 +29,16 @@
           <h1 class="text-4xl font-bold logo-gradient">Eventify</h1>
         </a>
       </div>
-      <div class="flex items-center mb-4 md:mb-0">
-        <input type="text" placeholder="Cari Event"
-          class="bg-gray-800 text-white rounded-md px-4 py-2 mr-2 custom-search-input" />
-        <button class="bg-gray-800 text-white rounded-md px-4 py-2">
-          Search
-        </button>
-      </div>
       <div class="flex items-center">
-        <button class="bg-gray-800 text-white rounded-md px-4 py-2 mr-2" onclick="window.location.href='/logout'">
-          Logout
+        <button class="bg-gray-800 text-white rounded-md px-4 py-2 mr-2" onclick="window.location.href='/'">
+          Kembali
         </button>
       </div>
 
     </div>
   </div>
 
-  <div class="px-8 py-4">
+  <div class="px-8 py-6">
     <!-- a {{ event }} object that has event.event (the name) and then event.organizer, event.kategori, event.deskripsi, event.foto, event.link_pendaftaran, event.deadline -->
     <!-- write a layout to show all of the object data, with image on the left and the whole thing on the right -->
 
@@ -92,14 +85,24 @@
         <div class="pt-5">
           <a target="_blank" rel="noopener noreferrer" href="{{ event.link_pendaftaran }}"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5">
-            Daftar Sekarang
+            Daftar Sekarang!
           </a>
         </div>
       </div>
     </div>
-
-
   </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark pt-10 pb-8">
+    <div class="container mx-auto flex-col items-center justify-center text-center">
+      <!-- Logo -->
+      <a href="/">
+        <h1 class="text-2xl font-bold logo-gradient">Eventify</h1>
+      </a>
+      <!-- Copyright text -->
+      <p class="text-sm font-semibold text-gray-400 -mt-4">&copy; 2023 Eventify. All rights reserved.</p>
+
+  </footer>
 </body>
 <script>
   $(document).ready(function () {
