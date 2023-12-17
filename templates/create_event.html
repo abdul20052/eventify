@@ -92,19 +92,30 @@
       </div>
 
       <!-- Submit Button -->
-      <div class="mb-4 flex justify-center items-center">
+      <div class="mt-10 mb-4 flex justify-center items-center">
         <button id="button-submit"
           class="bg-gray-300 text-gray-700 w-48 font-bold rounded-md py-2 px-4 hover:bg-gray-400"
           onclick="submitForm()">
           Create Event
         </button>
         <button class="bg-red-500 text-white w-48 font-bold rounded-md py-2 px-4 ml-2 hover:bg-red-600"
-          onclick="logout()">
-          Logout
+          onclick="back()">
+          Cancel
         </button>
       </div>
     </div>
   </div>
+  <!-- Footer -->
+  <footer class="bg-dark pt-20 pb-8">
+    <div class="container mx-auto flex-col items-center justify-center text-center">
+      <!-- Logo -->
+      <a href="/">
+        <h1 class="text-3xl font-bold logo-gradient">Eventify</h1>
+      </a>
+      <!-- Copyright text -->
+      <p class="text-sm font-semibold text-gray-400 -mt-2">&copy; 2023 Eventify. All rights reserved.</p>
+
+  </footer>
 </body>
 <script>
   let buttonSubmit = $("#button-submit")[0];
@@ -205,18 +216,18 @@
     return true;
   }
 
-  function logout() {
+  function back() {
     $.ajax({
       method: "GET",
-      url: "/logout",
+      url: "/",
       success: function (response) {
         // Setelah berhasil logout, arahkan pengguna ke halaman login
-        window.location.href = "/login";
+        window.location.href = "/";
       },
       error: function (error) {
         Swal.fire({
           title: "Error",
-          text: "Terjadi kesalahan saat logout.",
+          text: "Terjadi kesalahan saat kembali ke beranda.",
           icon: "error",
           confirmButtonText: "OK",
         });
