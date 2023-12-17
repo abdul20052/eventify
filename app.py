@@ -85,6 +85,7 @@ def get_events():
     return jsonify({'events': events_list})
 
 @app.route('/event/<event_id>')
+@login_required
 def detail_event(event_id):
     event = db.events.find_one({'_id': ObjectId(event_id)})
     return render_template('event_detail.html', event=event)
