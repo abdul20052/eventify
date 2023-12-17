@@ -116,7 +116,7 @@ def sign_in():
     username_receive = request.form["username_give"]
     password_receive = request.form["password_give"]
     pw_hash = hashlib.sha256(password_receive.encode("utf-8")).hexdigest()
-    result = db.events.find_one(
+    result = db.users.find_one(
         {
             "username": username_receive,
             "password": pw_hash,
@@ -158,7 +158,7 @@ def sign_up():
         "profile_pic_real": "profile_pics/profile_placeholder.png", 
         "profile_info": ""                                          
     }
-    db.events.insert_one(doc)
+    db.users.insert_one(doc)
     
     return jsonify({'result': 'success'})
 
