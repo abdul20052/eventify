@@ -37,6 +37,19 @@ def create_event():
 def format_date(value, format='%d %B %Y'):
     return datetime.strptime(value, '%Y-%m-%d').strftime(format)
 
+@app.template_filter('formattime')
+def format_time(value):
+    time = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+    diff = datetime.now() - time
+    if diff.days > 0:
+        return f'{diff.days} hari yang lalu'
+    elif diff.seconds > 3600:
+        return f'{diff.seconds // 3600} jam yang lalu'
+    elif diff.seconds > 60:
+        return f'{diff.seconds // 60} menit yang lalu'
+    else:
+        return f'{diff.seconds} detik yang lalu'
+
 
 @app.route("/posting", methods=["POST"])
 def posting():
@@ -66,7 +79,6 @@ def posting():
         "message": "Event berhasil ditambahkan!"
     })
 
-from flask import render_template
 
 @app.route('/my_events', methods=['GET'])
 @login_required
@@ -117,10 +129,14 @@ def get_event(event_id):
     return jsonify(event)
 
 @app.route('/event/<event_id>')
-@login_required
 def detail_event(event_id):
     event = db.events.find_one({'_id': ObjectId(event_id)})
-    return render_template('event_detail.html', event=event)
+    comments = event.get('comments', [])
+    if 'username' in session:
+      username = session['username']
+    else:
+      username = None
+    return render_template('event_detail.html', event=event, username=username, comments=comments)
 
 @app.route('/')
 def home():
@@ -228,6 +244,32 @@ def edit_event():
     }})
 
     return jsonify({'message': 'Event berhasil diubah!'})
+
+@app.route('/post_comment', methods=['POST'])
+def post_comment():
+    event_id = request.form.get('event_id_give')
+    text_receive = request.form.get('text_give')
+    time_receive = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    new_comment = {
+        'author': session['username'],
+        'text': text_receive,
+        'time': time_receive
+    }
+
+    db.events.update_one({'_id': ObjectId(event_id)}, {'$push': {'comments': new_comment}})
+
+    return jsonify({'message': 'Komentar berhasil ditambahkan!'})
+
+@app.route('/delete_comment', methods=['POST'])
+def delete_comment():
+    event_id = request.form.get('event_id_give')
+    author = request.form.get('author_give')
+    text = request.form.get('text_give')
+
+    db.events.update_one({'_id': ObjectId(event_id)}, {'$pull': {'comments': {'author': author, 'text': text}}})
+
+    return jsonify({'message': 'Komentar berhasil dihapus!'})
 
 @app.route('/edit_event')
 def get_edit_event():

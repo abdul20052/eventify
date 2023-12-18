@@ -39,9 +39,6 @@
   </div>
 
   <div class="px-8 py-6">
-    <!-- a {{ event }} object that has event.event (the name) and then event.organizer, event.kategori, event.deskripsi, event.foto, event.link_pendaftaran, event.deadline -->
-    <!-- write a layout to show all of the object data, with image on the left and the whole thing on the right -->
-
     <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
       <div class="md:w-1/2">
         <div class="w-full">
@@ -90,6 +87,82 @@
         </div>
       </div>
     </div>
+    <div class="mt-8">
+      <h2 class="text-2xl text-white mb-4">Komentar</h2>
+
+      <div class="space-y-4">
+        {% for comment in comments %}
+        <div class="bg-gray-700 p-4 rounded">
+          <div class="flex justify-between">
+            <div class="flex items-center">
+              <img class="w-12 h-12 rounded-full mr-4"
+                src="https://ui-avatars.com/api/?name={{ comment.author }}&amp;size=128&amp;rounded=true&amp;color=fff&amp;background=1f2937"
+                alt="{{ comment.author }}" />
+              <div>
+                <h3 class="text-lg text-white">{{ comment.author }}</h3>
+                <p class="text-gray-400">{{ comment.time|formattime }}</p>
+                <p class="text-gray-300">{{ comment.text }}</p>
+              </div>
+            </div>
+            {% if comment.author == username %}
+            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+              onclick="delete_comment('{{ comment.author }}', '{{ comment.text }}')">
+              Delete
+            </button>
+            {% endif %}
+
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if username %}
+      <div class="mt-6">
+        <div class="mb-4">
+          <label class="text-white" for="author">Nama</label>
+          <input class="bg-gray-700 text-white rounded w-full p-2 mt-1 cursor-not-allowed" type="text" id="author"
+            name="author" value="{{ username }}" disabled />
+        </div>
+        <div class="mb-4">
+          <label class="text-white" for="text">Komentar</label>
+          <textarea class="bg-gray-700 text-white rounded w-full p-2 mt-1" id="text" name="text" rows="3"
+            required></textarea>
+        </div>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit"
+          onclick="post_comment()">
+          Kirim
+        </button>
+      </div>
+      {% else %}
+      <style>
+        .overlay {
+          filter: opacity(0.2);
+        }
+      </style>
+      <div class="mt-6 relative">
+        <div class="overlay">
+          <div class="mb-4">
+            <label class="text-white" for="author">Nama</label>
+            <input class="bg-gray-700 text-white rounded w-full p-2 mt-1 cursor-not-allowed" type="text" id="author"
+              name="author" value="" disabled />
+          </div>
+          <div class="mb-4">
+            <label class="text-white" for="text">Komentar</label>
+            <textarea class="cursor-not-allowed bg-gray-700 text-white rounded w-full p-2 mt-1" id="text" name="text"
+              rows="3" required disabled></textarea>
+          </div>
+          <button class="cursor-not-allowed bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded center"
+            type="button" disabled>
+            Kirim
+          </button>
+        </div>
+        <button class="absolute bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="button"
+          onclick="location.href='/login'" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+          Login untuk Komentar
+        </button>
+      </div>
+      {% endif %}
+    </div>
   </div>
 
   <!-- Footer -->
@@ -114,6 +187,78 @@
       }
     });
   });
+
+  function delete_comment(author, text) {
+    var event_id = "{{ event._id }}";
+    var author = author;
+    var text = text;
+
+    $.ajax({
+      method: "POST",
+      url: "/delete_comment",
+      data: {
+        event_id_give: event_id,
+        author_give: author,
+        text_give: text,
+      },
+      success: function (response) {
+        Swal.fire({
+          title: "Success",
+          text: "Komentar berhasil dihapus.",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
+      },
+      error: function (error) {
+        Swal.fire({
+          title: "Error",
+          text: "Terjadi kesalahan saat menghapus komentar.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      },
+    });
+  }
+
+
+  function post_comment() {
+    var event_id = "{{ event._id }}";
+    var author = "{{ username }}";
+    var text = $("#text").val();
+
+    $.ajax({
+      method: "POST",
+      url: "/post_comment",
+      data: {
+        event_id_give: event_id,
+        text_give: text,
+      },
+      success: function (response) {
+        Swal.fire({
+          title: "Success",
+          text: "Komentar berhasil ditambahkan.",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
+      },
+      error: function (error) {
+        Swal.fire({
+          title: "Error",
+          text: "Terjadi kesalahan saat menambahkan komentar.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      },
+    });
+  }
 
   function logout() {
     $.ajax({
