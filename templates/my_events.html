@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <title>Eventify</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="/static/assets/favicon.ico" />
+  <style>
+    .logo-gradient {
+      background: linear-gradient(90deg, #0070f3, #00b4f5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      /* set the text so that its not cropped */
+      height: 48px;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-800">
+  <!-- Navbar -->
+  <div class="bg-gray-900 py-2 px-4 md:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="flex items-center mb-4 md:mb-0">
+        <a href="/">
+          <h1 class="text-4xl font-bold logo-gradient">Eventify</h1>
+        </a>
+      </div>
+      <div class="flex items-center">
+        <button class="bg-gray-800 text-white rounded-md px-4 py-2 mr-2" onclick="window.location.href='/'">
+          Kembali
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class=" px-8 py-4">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 m-4 grid-cols-responsive" id="post-box">
+      {% for event in events %}
+      <div class="rounded-xl overflow-hidden bg-gray-800 border-2 border-gray-900 mt-4 cursor-pointer">
+        <div onclick="window.location.href='/event/{{ event._id }}'">
+          <div class="overflow-hidden">
+            <img class="w-full h-80 object-cover transform transition-all hover:scale-125" src="{{ event.foto }}"
+              alt="">
+          </div>
+          <div class="px-4 pt-4">
+            <span
+              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#{{
+              event.kategori }}</span>
+          </div>
+          <div class="px-6 pt-2 flex justify-between">
+            <span class="text-gray-400">{{ event.deadline|formatdate }}</span>
+            <div class="flex justify-center items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#9CA3AF" aria-hidden="true" width="16"
+                height="16">
+                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z">
+                </path>
+                <path fill-rule="evenodd"
+                  d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
+                  clip-rule="evenodd">
+                </path>
+              </svg>
+              <p class="text-gray-400 ml-1">{{ event.views }}</p>
+            </div>
+          </div>
+          <div class="px-6 pt-2 pb-3">
+            <div class="font-bold text-xl -mb-1 text-white">{{ event.event }}</div>
+            <p class="text-gray-400 text-base mb-3">{{ event.organizer }}</p>
+          </div>
+
+        </div>
+        <div class="flex justify-between px-6 pb-3">
+          <button class="bg-red-500 text-white rounded-md px-4 py-2 mr-2" style="width: 50%"
+            onclick="deleteEvent('{{ event._id }}')">
+            Delete
+          </button>
+          <button class="bg-yellow-500 text-white rounded-md px-4 py-2" onclick="editEvent('{{ event._id }}')"
+            style="width: 50%">
+            Edit
+          </button>
+        </div>
+      </div>
+      {% else %}
+      <div></div>
+      <div class="flex flex-col items-center w-full justify-center">
+        <img src="static/assets/not-found.svg" alt="" class="w-full">
+        <div class="text-center text-gray-500">
+          <p>Kamu belum menambahkan event.</p>
+        </div>
+      </div>
+      <div></div>
+      {% endfor %}
+    </div>
+    <script>
+      function editEvent(id) {
+        window.location.href = "/edit_event?id=" + id;
+      }
+      function deleteEvent(id) {
+        Swal.fire({
+          title: 'Hapus Event?',
+          text: "Kamu tidak akan bisa mengembalikan event ini!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#EF4444',
+          cancelButtonColor: '#9CA3AF',
+          confirmButtonText: 'Ya, hapus!',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: '/delete_event',
+              type: 'POST',
+              data: {
+                _id: id
+              },
+              success: function (data) {
+                Swal.fire(
+                  'Terhapus!',
+                  'Event kamu berhasil dihapus.',
+                  'success'
+                ).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.href = "/my_events";
+                  }
+                })
+              }
+            });
+          }
+        })
+      }
+    </script>
+
+    <!-- Footer -->
+    <footer class="bg-dark pt-10 pb-8">
+      <div class="container mx-auto flex-col items-center justify-center text-center">
+        <!-- Logo -->
+        <a href="/">
+          <h1 class="text-2xl font-bold logo-gradient">Eventify</h1>
+        </a>
+        <!-- Copyright text -->
+        <p class="text-sm font-semibold text-gray-400 -mt-4">&copy; 2023 Eventify. All rights reserved.</p>
+
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <title>Eventify | Edit Event</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    .logo-gradient {
+      background: linear-gradient(90deg, #0070f3, #00b4f5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      /* set the text so that its not cropped */
+      height: 48px;
+    }
+  </style>
+
+</head>
+
+<body class="bg-gray-800">
+  <!-- Navbar -->
+  <div class="bg-gray-900 py-2 px-4 md:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="flex items-center mb-4 md:mb-0">
+        <a href="/">
+          <h1 class="text-4xl font-bold logo-gradient">Eventify</h1>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="min-h-screen flex items-center justify-center py-10 px-3">
+    <div class=" bg-gray-800 border-2 p-5  rounded-md shadow-md w-full max-w-xl border-gray-900 mt-4 overflow-hidden">
+      <h1 class="text-2xl font-semibold mb-4 text-white text-center">Edit Event</h1>
+
+      <!-- Event Form -->
+      <input type="hidden" id="_id" name="_id">
+      <!-- Event Name -->
+      <div class="mb-4">
+        <label for="event" class="block text-gray-400 font-semibold mb-2">Event Name</label>
+        <input type="text" id="event" name="event" class="w-full border rounded-md py-2 px-3 bg-gray-200" required>
+      </div>
+
+      <!-- Organizer -->
+      <div class="mb-4">
+        <label for="organizer" class="block text-gray-400 font-semibold mb-2">Organizer</label>
+        <input type="text" id="organizer" name="organizer" class="w-full border rounded-md py-2 px-3 bg-gray-200"
+          required>
+      </div>
+
+      <!-- Category -->
+      <div class="mb-4">
+        <label for="kategori" class="block text-gray-400 font-semibold mb-2">Category</label>
+        <select id="kategori" name="kategori" class="w-full border rounded-md py-2 px-3 bg-gray-200" required>
+          <option value="">- Select -</option>
+          <option value="lomba">Lomba</option>
+          <option value="seminar">Seminar</option>
+        </select>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-4">
+        <label for="deskripsi" class="block text-gray-400 font-semibold mb-2">Description</label>
+        <textarea id="deskripsi" name="deskripsi" rows="4" class="w-full border rounded-md py-2 px-3 bg-gray-200"
+          required></textarea>
+      </div>
+
+      <!-- Registration Link -->
+      <div class="mb-4">
+        <label for="linkPendaftaran" class=" block text-gray-400 font-semibold mb-2">Registration Link</label>
+        <input type="text" id="linkPendaftaran" name="linkPendaftaran"
+          class="w-full border rounded-md py-2 px-3 bg-gray-200" required>
+      </div>
+
+      <!-- Deadline -->
+      <div class="mb-4">
+        <label for="deadline" class="block text-gray-400 font-semibold mb-2">Deadline</label>
+        <input type="date" id="deadline" name="deadline" class="w-full border rounded-md py-2 px-3 bg-gray-200"
+          required>
+      </div>
+
+
+      <!-- Photo Upload -->
+      <div class="mb-4">
+        <label for="foto" class="block text-gray-400 font-semibold mb-2">Event Photo</label>
+        <input type="file" id="foto" name="foto" class="w-full text-gray-200">
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-10 mb-4 flex justify-center items-center">
+        <button id="button-submit"
+          class="bg-gray-300 text-gray-700 w-48 font-bold rounded-md py-2 px-4 hover:bg-gray-400"
+          onclick="submitForm()">
+          Edit Event
+        </button>
+        <button class="bg-red-500 text-white w-48 font-bold rounded-md py-2 px-4 ml-2 hover:bg-red-600"
+          onclick="back()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <footer class="bg-dark pt-10 pb-8">
+    <div class="container mx-auto flex-col items-center justify-center text-center">
+      <!-- Logo -->
+      <a href="/">
+        <h1 class="text-2xl font-bold logo-gradient">Eventify</h1>
+      </a>
+      <!-- Copyright text -->
+      <p class="text-sm font-semibold text-gray-400 -mt-4">&copy; 2023 Eventify. All rights reserved.</p>
+
+  </footer>
+</body>
+<script>
+  // Fetch event data when the page loads
+  $(document).ready(async function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventId = urlParams.get('id');
+
+    const response = await fetch(`/get_event/${eventId}`);
+    const event = await response.json();
+
+    // Fill the form with the existing event data
+    $('#_id').val(event._id);
+    $('#event').val(event.event);
+    $('#organizer').val(event.organizer);
+    $('#kategori').val(event.kategori);
+    $('#deskripsi').val(event.deskripsi);
+    $('#linkPendaftaran').val(event.link_pendaftaran);
+    $('#deadline').val(event.deadline);
+    $('#foto').val(event.foto);
+  });
+
+  let buttonSubmit = $("#button-submit")[0];
+  async function submitForm() {
+    let cek = validateForm();
+    if (!cek) {
+      buttonSubmit.disabled = false;
+      return false;
+    } else {
+      buttonSubmit.disabled = true;
+      buttonSubmit.innerHTML = "Loading...";
+      // Fetch form data
+      let event = $("#event").val();
+      let organizer = $("#organizer").val();
+      let kategori = $("#kategori").val();
+      let deskripsi = $("#deskripsi").val();
+      let linkPendaftaran = $("#linkPendaftaran").val();
+      let deadline = $("#deadline").val();
+
+      let file = $("#foto").prop("files")[0];
+      let formDataFoto = new FormData();
+      formDataFoto.append("image", file);
+
+      const IMGBB_API_KEY = 'cc08f8c83f08731096cbb6abaaf4366f'
+      const IMGBB_URL = 'https://api.imgbb.com/1/upload'
+
+      // Upload image before sending it to the database
+      let response = await fetch(IMGBB_URL + '?key=' + IMGBB_API_KEY, {
+        method: 'POST',
+        body: formDataFoto
+      })
+
+      let json = await response.json()
+      let imageUrl = json.data.url
+
+      // Create FormData object to send files and other data
+      let formData = new FormData();
+      formData.append("event_id_give", $("#_id").val());
+      formData.append("event_give", event);
+      formData.append("organizer_give", organizer);
+      formData.append("kategori_give", kategori);
+      formData.append("deskripsi_give", deskripsi);
+      formData.append("link_give", linkPendaftaran);
+      formData.append("deadline_give", deadline);
+      formData.append("foto_give", imageUrl);
+
+      $.ajax({
+        method: "PATCH",
+        processData: false,
+        contentType: false,
+        url: "/edit",
+        data: formData,
+        success: function (response) {
+          buttonSubmit.disabled = false;
+          buttonSubmit.innerHTML = "Edit Event";
+          Swal.fire({
+            title: "Success",
+            text: response.message,
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = "/";
+            }
+          });
+
+          $("#createEventForm")[0].reset();
+        },
+        error: function (error) {
+          buttonSubmit.disabled = false;
+          buttonSubmit.innerHTML = "Edit Event";
+          Swal.fire({
+            title: "Error",
+            text: "Terjadi kesalahan saat mengubah event.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        },
+      });
+    }
+  }
+
+  function validateForm() {
+    // Ambil nilai dari setiap elemen formulir
+    let eventName = $("#event").val();
+    let organizer = $("#organizer").val();
+    let category = $("#kategori").val();
+    let description = $("#deskripsi").val();
+    let registrationLink = $("#linkPendaftaran").val();
+    let deadline = $("#deadline").val();
+    let foto = $("#foto").val();
+
+    // Validasi apakah setiap kolom sudah terisi
+    if (!eventName || !organizer || !category || !description || !registrationLink || !deadline || !foto) {
+      // Tampilkan peringatan bahwa semua kolom harus diisi
+      alert("Semua kolom harus diisi!");
+      return false;
+    }
+    return true;
+  }
+
+  function back() {
+    $.ajax({
+      method: "GET",
+      url: "/",
+      success: function (response) {
+        // Setelah berhasil logout, arahkan pengguna ke halaman login
+        window.location.href = "/";
+      },
+      error: function (error) {
+        Swal.fire({
+          title: "Error",
+          text: "Terjadi kesalahan saat kembali ke beranda.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      },
+    });
+  }
+</script>
+
+
+</html>

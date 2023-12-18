@@ -177,8 +177,9 @@
             if (filteredEvents.length === 0) {
               if ($("#no-events-message").length === 0) {
                 postBox.after(`
-            <div id="no-events-message" class="flex items-center justify-center w-full">
-                <div class="text-center text-white w-full">
+            <div id="no-events-message" class="flex flex-col items-center justify-center w-full">
+                <img src="static/assets/not-found.svg" alt="" style="width: 30%">
+                <div class="text-center text-white w-full text-gray-500 mt-4">
                     Event yang anda cari tidak ada.
                 </div>
             </div>
@@ -205,6 +206,9 @@
         <a href="/">
           <h1 class="text-4xl font-bold logo-gradient">Eventify</h1>
         </a>
+        {% if logged_in %}
+        <div style="width: 190px;"></div>
+        {% endif %}
       </div>
       <div class="flex items-center mb-4 md:mb-0">
         <input type="text" placeholder="Cari Event"
@@ -217,6 +221,9 @@
         {% if logged_in %}
         <button class="bg-gray-800 text-white rounded-md px-4 py-2 mr-2" onclick="window.location.href='/create_event'">
           Tambah Event
+        </button>
+        <button class="bg-gray-800 text-white rounded-md px-4 py-2 mr-2" onclick="window.location.href='/my_events'">
+          Event Saya
         </button>
         <button class="bg-gray-800 text-white rounded-md px-4 py-2" onclick="window.location.href='/logout'">
           Logout

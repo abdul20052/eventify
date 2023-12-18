@@ -47,6 +47,7 @@ def posting():
     link_receive = request.form.get('link_give')
     deadline_receive = request.form.get('deadline_give')
     foto_receive = request.form.get('foto_give')
+    username_receive = session['username']
 
     # Simpan data ke MongoDB
     data_event = {
@@ -57,12 +58,37 @@ def posting():
         "link_pendaftaran": link_receive,
         "deadline": deadline_receive,
         "foto": foto_receive,
+        "username": username_receive,
     }
     db.events.insert_one(data_event)
     return jsonify({
         "result": "success", 
         "message": "Event berhasil ditambahkan!"
     })
+
+from flask import render_template
+
+@app.route('/my_events', methods=['GET'])
+@login_required
+def get_my_events():
+    username = session['username']
+    events = db.events.find({'username': username})
+
+    events_list = []
+    for event in events:
+        events_list.append({
+            '_id': str(event['_id']),
+            'event': event['event'],
+            'organizer': event['organizer'],
+            'kategori': event['kategori'],
+            'deskripsi': event['deskripsi'],
+            'link_pendaftaran': event['link_pendaftaran'],
+            'deadline': event['deadline'],
+            'foto': event['foto'],
+            'views': event.get('views', 0)
+        })
+
+    return render_template('my_events.html', events=events_list)
 
 @app.route('/get_events', methods=['GET'])
 def get_events():
@@ -83,6 +109,12 @@ def get_events():
         })
 
     return jsonify({'events': events_list})
+
+@app.route('/get_event/<event_id>', methods=['GET'])
+def get_event(event_id):
+    event = db.events.find_one({'_id': ObjectId(event_id)})
+    event['_id'] = str(event['_id'])
+    return jsonify(event)
 
 @app.route('/event/<event_id>')
 @login_required
@@ -108,7 +140,7 @@ def login():
 @app.route('/logout', methods=['GET'])
 def logout():
     session.pop('username', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('home'))
 
 @app.route("/sign_in", methods=["POST"])
 def sign_in():
@@ -173,6 +205,39 @@ def update_views(event_id):
     db.events.update_one({'_id': ObjectId(event_id)}, {'$set': {'views': views}})
     return jsonify({'msg': 'success'})
 
+
+@app.route('/edit', methods=['PATCH'])
+def edit_event():
+    event_id = request.form.get('event_id_give')
+    event_receive = request.form.get('event_give')
+    organizer_receive = request.form.get('organizer_give')
+    kategori_receive = request.form.get('kategori_give')
+    deskripsi_receive = request.form.get('deskripsi_give')
+    link_receive = request.form.get('link_give')
+    deadline_receive = request.form.get('deadline_give')
+    foto_receive = request.form.get('foto_give')
+
+    db.events.update_one({'_id': ObjectId(event_id)}, {'$set': {
+        'event': event_receive,
+        'organizer': organizer_receive,
+        'kategori': kategori_receive,
+        'deskripsi': deskripsi_receive,
+        'link_pendaftaran': link_receive,
+        'deadline': deadline_receive,
+        'foto': foto_receive
+    }})
+
+    return jsonify({'message': 'Event berhasil diubah!'})
+
+@app.route('/edit_event')
+def get_edit_event():
+    return render_template('edit_event.html')
+
+@app.route('/delete_event', methods=['POST'])
+def delete_event():
+    event_id = request.form.get('_id')
+    db.events.delete_one({'_id': ObjectId(event_id)})
+    return jsonify({'message': 'Event berhasil dihapus!'})
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=5000, debug=True)
